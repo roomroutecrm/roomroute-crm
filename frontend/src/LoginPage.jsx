@@ -64,7 +64,7 @@ function LoginPage() {
     width: '250px',
     textAlign: 'center',
   };
-
+<h1 style={{ color: 'red' }}>THIS IS THE REAL LoginPage.jsx</h1>
   return (
     <div style={{ fontFamily: 'sans-serif', padding: '2rem' }}>
       <h1>Welcome to RoomRoute CRM</h1>
