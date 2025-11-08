@@ -1,21 +1,31 @@
 import express from 'express';
 import cors from 'cors';
-import authRoutes from './auth/routes'; // Make sure this path is correct
+import authRoutes from './auth/routes'; // adjust if your path is different
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
-app.use(cors()); // Allow requests from frontend
-app.use(express.json()); // Parse JSON
+// CORS settings to allow frontend connection
+const corsOptions = {
+  origin: [
+    'https://roomroute-crm-production-c6ef.up.railway.app', // Railway frontend
+    'http://localhost:3000' // Local testing (optional)
+  ],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+};
 
-// Routes
-app.use('/auth', authRoutes); // Register/login routes
+app.use(cors(corsOptions));
+app.use(express.json());
 
-// Root route
+// Test route
 app.get('/', (req, res) => {
   res.send('RoomRoute CRM backend is running!');
 });
+
+// Auth routes
+app.use('/auth', authRoutes);
 
 // Start server
 app.listen(PORT, () => {
