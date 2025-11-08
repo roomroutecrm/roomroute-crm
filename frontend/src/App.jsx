@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 
-const API_BASE = 'https://roomroute-crm-production.up.railway.app'; // replace with your actual backend URL if different
-
 function App() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -9,51 +7,48 @@ function App() {
 
   const handleRegister = async () => {
     try {
-      const res = await fetch(`${API_BASE}/auth/register`, {
+      const response = await fetch('https://roomroute-crm-production.up.railway.app/auth/register', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ email, password }),
       });
-      const data = await res.json();
-      if (res.ok) {
-        setMessage(`Registered successfully! ID: ${data.id}`);
-      } else {
-        setMessage(data.error || 'Registration failed');
-      }
-    } catch (err) {
-      setMessage('Error: ' + err.message);
-    }
-  };
 
-  const handleLogin = async () => {
-    try {
-      const res = await fetch(`${API_BASE}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setMessage('Logged in successfully!');
+      const data = await response.json();
+      if (response.ok) {
+        setMessage('✅ Registration successful!');
       } else {
-        setMessage(data.error || 'Login failed');
+        setMessage(`❌ Error: ${data.error}`);
       }
-    } catch (err) {
-      setMessage('Error: ' + err.message);
+    } catch (error) {
+      setMessage('❌ Network error. Please try again.');
     }
   };
 
   return (
-    <div style={{ padding: '2rem', fontFamily: 'Arial' }}>
-      <h1>RoomRoute CRM</h1>
-      <p>Email:</p>
-      <input value={email} onChange={e => setEmail(e.target.value)} />
-      <p>Password:</p>
-      <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
-      <br /><br />
+    <div style={{ fontFamily: 'sans-serif', padding: '2rem' }}>
+      <h1>Welcome to RoomRoute CRM</h1>
+      <p>The frontend is now connected and ready!</p>
+
+      <h2>Register a New User</h2>
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={e => setEmail(e.target.value)}
+        style={{ marginBottom: '0.5rem', display: 'block' }}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={e => setPassword(e.target.value)}
+        style={{ marginBottom: '0.5rem', display: 'block' }}
+      />
       <button onClick={handleRegister}>Register</button>
-      <button onClick={handleLogin} style={{ marginLeft: '1rem' }}>Login</button>
-      <p style={{ marginTop: '1rem', color: 'green' }}>{message}</p>
+
+      {message && <p>{message}</p>}
     </div>
   );
 }
